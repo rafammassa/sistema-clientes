@@ -1,4 +1,4 @@
-# 🚀 Sistema de Clientes (Mini CRM)
+# 🚀 Sistema de Gestão de Clientes (Mini CRM Full Stack)
 
 Sistema web completo para gerenciamento de clientes, desenvolvido com foco em organização de leads e acompanhamento de conversão.
 
@@ -6,9 +6,9 @@ Sistema web completo para gerenciamento de clientes, desenvolvido com foco em or
 
 ## 📌 Sobre o projeto
 
-Este projeto simula um sistema real utilizado por pequenos negócios para controle de clientes, permitindo acompanhar o progresso desde o primeiro contato até a conversão.
+Este projeto simula um sistema utilizado por pequenos negócios para gestão de clientes, acompanhamento de leads e análise de conversão.
 
-Além do CRUD completo, o sistema apresenta métricas que auxiliam na tomada de decisão.
+A aplicação foi desenvolvida com foco em criar uma solução simples, prática e aplicável no contexto real de negócios.
 
 ---
 
@@ -84,7 +84,7 @@ Durante o desenvolvimento deste projeto, foram trabalhados:
 
 ---
 
-## 💡 Diferencial
+## 💡 Diferencial do Projeto
 
 Além do CRUD completo, o sistema inclui métricas de conversão, aproximando a aplicação de um cenário real de negócio.
 
