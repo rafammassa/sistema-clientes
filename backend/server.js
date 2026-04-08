@@ -51,3 +51,24 @@ app.get('/clientes', (req, res) => {
     res.json(resultados);
   });
 });
+
+//ATUALIZAR CLIENTE
+app.put('/clientes/:id', (req, res) => {
+  const { id } = req.params;
+  const { nome, email, telefone, status } = req.body;
+
+  const sql = `
+    UPDATE clientes
+    SET nome = ?, email = ?, telefone = ?, status = ?
+    WHERE id = ?
+  `;
+
+  conexao.query(sql, [nome, email, telefone, status, id], (erro, resultado) => {
+    if (erro) {
+      console.error('Erro ao atualizar cliente:', erro);
+      return res.status(500).json({ erro: 'Erro ao atualizar cliente' });
+    }
+
+    res.json({ mensagem: 'Cliente atualizado com sucesso' });
+  });
+});
