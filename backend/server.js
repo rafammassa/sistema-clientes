@@ -72,3 +72,19 @@ app.put('/clientes/:id', (req, res) => {
     res.json({ mensagem: 'Cliente atualizado com sucesso' });
   });
 });
+
+//EXCLUIR CLIENTE
+app.delete('/clientes/:id', (req, res) => {
+  const { id } = req.params;
+
+  const sql = 'DELETE FROM clientes WHERE id = ?';
+
+  conexao.query(sql, [id], (erro, resultado) => {
+    if (erro) {
+      console.error('Erro ao excluir cliente:', erro);
+      return res.status(500).json({ erro: 'Erro ao excluir cliente' });
+    }
+
+    res.json({ mensagem: 'Cliente excluído com sucesso' });
+  });
+});
