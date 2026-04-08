@@ -20,6 +20,8 @@ async function carregarClientes() {
         <p><strong>Email:</strong> ${cliente.email}</p>
         <p><strong>Telefone:</strong> ${cliente.telefone}</p>
         <p><strong>Status:</strong> ${cliente.status}</p>
+
+        <button onclick="editarCliente(${cliente.id})">Editar</button>
         <button class="btn-excluir" onclick="excluirCliente(${cliente.id})">Excluir</button>
       `;
 
@@ -70,6 +72,23 @@ async function excluirCliente(id) {
   } catch (erro) {
     console.error('Erro ao excluir cliente:', erro);
   }
+}
+
+function editarCliente(id) {
+  const nome = prompt('Novo nome:');
+  const email = prompt('Novo email:');
+  const telefone = prompt('Novo telefone:');
+  const status = prompt('Novo status (lead, em contato, cliente):');
+
+  fetch(`${API_URL}/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ nome, email, telefone, status })
+  })
+    .then(() => carregarClientes())
+    .catch((erro) => console.error('Erro ao editar:', erro));
 }
 
 carregarClientes();
