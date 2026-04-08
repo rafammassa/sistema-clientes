@@ -36,6 +36,19 @@ function renderizarClientes(clientes) {
   });
 }
 
+function atualizarResumo(clientes) {
+  document.getElementById('total-clientes').textContent = clientes.length;
+
+  document.getElementById('total-leads').textContent =
+    clientes.filter(cliente => cliente.status.toLowerCase() === 'lead').length;
+
+  document.getElementById('total-em-contato').textContent =
+    clientes.filter(cliente => cliente.status.toLowerCase() === 'em contato').length;
+
+  document.getElementById('total-clientes-fechados').textContent =
+    clientes.filter(cliente => cliente.status.toLowerCase() === 'cliente').length;
+}
+
 async function carregarClientes() {
   try {
     const resposta = await fetch(API_URL);
@@ -43,6 +56,7 @@ async function carregarClientes() {
 
     todosClientes = clientes;
     renderizarClientes(clientes);
+    atualizarResumo(clientes);
   } catch (erro) {
     console.error('Erro ao carregar clientes:', erro);
   }
@@ -135,6 +149,7 @@ campoBusca.addEventListener('input', () => {
   );
 
   renderizarClientes(clientesFiltrados);
+  atualizarResumo(clientesFiltrados);
 });
 
 carregarClientes();
