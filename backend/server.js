@@ -37,3 +37,17 @@ app.post('/clientes', (req, res) => {
 app.listen(3000, () => {
   console.log('Servidor rodando na porta 3000');
 });
+
+//LISTAR CLIENTES
+app.get('/clientes', (req, res) => {
+  const sql = 'SELECT * FROM clientes';
+
+  conexao.query(sql, (erro, resultados) => {
+    if (erro) {
+      console.error('Erro ao buscar clientes:', erro);
+      return res.status(500).json({ erro: 'Erro ao buscar clientes' });
+    }
+
+    res.json(resultados);
+  });
+});
