@@ -38,16 +38,28 @@ function renderizarClientes(clientes) {
 }
 
 function atualizarResumo(clientes) {
-  document.getElementById('total-clientes').textContent = clientes.length;
+  const total = clientes.length;
 
-  document.getElementById('total-leads').textContent =
-    clientes.filter(cliente => cliente.status.toLowerCase() === 'lead').length;
+  const totalLeads = clientes.filter(cliente =>
+    cliente.status.toLowerCase() === 'lead'
+  ).length;
 
-  document.getElementById('total-em-contato').textContent =
-    clientes.filter(cliente => cliente.status.toLowerCase() === 'em contato').length;
+  const totalEmContato = clientes.filter(cliente =>
+    cliente.status.toLowerCase() === 'em contato'
+  ).length;
 
-  document.getElementById('total-clientes-fechados').textContent =
-    clientes.filter(cliente => cliente.status.toLowerCase() === 'cliente').length;
+  const totalClientesFechados = clientes.filter(cliente =>
+    cliente.status.toLowerCase() === 'cliente'
+  ).length;
+
+  const taxaConversao =
+    total > 0 ? ((totalClientesFechados / total) * 100).toFixed(1) : 0;
+
+  document.getElementById('total-clientes').textContent = total;
+  document.getElementById('total-leads').textContent = totalLeads;
+  document.getElementById('total-em-contato').textContent = totalEmContato;
+  document.getElementById('total-clientes-fechados').textContent = totalClientesFechados;
+  document.getElementById('taxa-conversao').textContent = `${taxaConversao}%`;
 }
 
 function cancelarEdicao() {
