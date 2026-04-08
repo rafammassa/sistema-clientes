@@ -108,6 +108,7 @@ form.addEventListener('submit', async (event) => {
 
       clienteEditandoId = null;
       botaoSubmit.textContent = 'Cadastrar';
+      mostrarMensagem('Cliente atualizado com sucesso!', 'sucesso');
     } else {
       await fetch(API_URL, {
         method: 'POST',
@@ -116,27 +117,50 @@ form.addEventListener('submit', async (event) => {
         },
         body: JSON.stringify(cliente)
       });
+
+      mostrarMensagem('Cliente cadastrado com sucesso!', 'sucesso');
     }
 
     form.reset();
     carregarClientes();
   } catch (erro) {
     console.error('Erro ao salvar cliente:', erro);
+    mostrarMensagem('Erro ao salvar cliente.', 'erro');
   }
 });
 
 async function excluirCliente(id) {
+  const confirmar = confirm('Tem certeza que deseja excluir este cliente?');
+
+  if (!confirmar) return;
+
   try {
     const resposta = await fetch(`${API_URL}/${id}`, {
       method: 'DELETE'
     });
 
     if (resposta.ok) {
+      mostrarMensagem('Cliente excluído com sucesso!', 'sucesso');
       carregarClientes();
+    } else {
+      mostrarMensagem('Erro ao excluir cliente.', 'erro');
     }
   } catch (erro) {
     console.error('Erro ao excluir cliente:', erro);
+    mostrarMensagem('Erro ao excluir cliente.', 'erro');
   }
+}
+
+const mensagem = document.getElementById('mensagem');
+
+function mostrarMensagem(texto, tipo) {
+  mensagem.textContent = texto;
+  mensagem.className = `mensagem ${tipo}`;
+
+  setTimeout(() => {
+    mensagem.className = 'mensagem';
+    mensagem.textContent = '';
+  }, 3000);
 }
 
 campoBusca.addEventListener('input', () => {
