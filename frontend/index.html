@@ -12,6 +12,10 @@
 
     <div id="mensagem" class="mensagem"></div>
 
+    <p id="modo-edicao" class="modo-edicao oculto">
+      Você está editando um cliente.
+    </p>
+
     <form id="form-cliente">
       <input type="text" id="nome" placeholder="Nome" required />
       <input type="email" id="email" placeholder="Email" required />
@@ -25,6 +29,7 @@
       </select>
 
       <button type="submit">Cadastrar</button>
+      <button type="button" id="btn-cancelar" class="btn-cancelar oculto">Cancelar edição</button>
     </form>
 
     <input type="text" id="busca" placeholder="Buscar cliente por nome, email ou status..." />

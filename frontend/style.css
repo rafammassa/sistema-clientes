@@ -187,6 +187,25 @@ button:hover {
   color: #991b1b;
 }
 
+.modo-edicao {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 14px;
+  padding: 10px;
+  border-radius: 8px;
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.oculto {
+  display: none;
+}
+
+.btn-cancelar {
+  background: #6b7280;
+  color: white;
+}
+
 @media (max-width: 768px) {
   .resumo-cards {
     grid-template-columns: repeat(2, 1fr);

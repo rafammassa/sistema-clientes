@@ -2,6 +2,8 @@ const form = document.getElementById('form-cliente');
 const listaClientes = document.getElementById('lista-clientes');
 const botaoSubmit = document.querySelector('button[type="submit"]');
 const campoBusca = document.getElementById('busca');
+const modoEdicao = document.getElementById('modo-edicao');
+const btnCancelar = document.getElementById('btn-cancelar');
 
 const API_URL = 'http://localhost:3000/clientes';
 
@@ -18,7 +20,6 @@ function renderizarClientes(clientes) {
     const classeStatus = cliente.status.toLowerCase().replace(/\s+/g, '-');
 
     div.innerHTML = `
-      <p><strong>ID:</strong> ${cliente.id}</p>
       <p><strong>Nome:</strong> ${cliente.nome}</p>
       <p><strong>Email:</strong> ${cliente.email}</p>
       <p><strong>Telefone:</strong> ${cliente.telefone}</p>
@@ -48,6 +49,16 @@ function atualizarResumo(clientes) {
   document.getElementById('total-clientes-fechados').textContent =
     clientes.filter(cliente => cliente.status.toLowerCase() === 'cliente').length;
 }
+
+function cancelarEdicao() {
+  clienteEditandoId = null;
+  form.reset();
+  botaoSubmit.textContent = 'Cadastrar';
+  modoEdicao.classList.add('oculto');
+  btnCancelar.classList.add('oculto');
+}
+
+btnCancelar.addEventListener('click', cancelarEdicao);
 
 async function carregarClientes() {
   try {
@@ -80,6 +91,8 @@ function editarCliente(id) {
 
       clienteEditandoId = id;
       botaoSubmit.textContent = 'Atualizar';
+      modoEdicao.classList.remove('oculto');
+      btnCancelar.classList.remove('oculto');
     })
     .catch((erro) => {
       console.error('Erro ao buscar cliente para edição:', erro);
@@ -96,6 +109,21 @@ form.addEventListener('submit', async (event) => {
     status: document.getElementById('status').value
   };
 
+  if (!cliente.nome || !cliente.email || !cliente.telefone || !cliente.status) {
+    mostrarMensagem('Preencha todos os campos.', 'erro');
+    return;
+  }
+
+  if (!cliente.email.includes('@') || !cliente.email.includes('.')) {
+    mostrarMensagem('Digite um email válido.', 'erro');
+    return;
+  }
+
+  if (cliente.telefone.replace(/\D/g, '').length < 10) {
+    mostrarMensagem('Digite um telefone válido com DDD.', 'erro');
+    return;
+  }
+
   try {
     if (clienteEditandoId !== null) {
       await fetch(`${API_URL}/${clienteEditandoId}`, {
@@ -107,7 +135,6 @@ form.addEventListener('submit', async (event) => {
       });
 
       clienteEditandoId = null;
-      botaoSubmit.textContent = 'Cadastrar';
       mostrarMensagem('Cliente atualizado com sucesso!', 'sucesso');
     } else {
       await fetch(API_URL, {
