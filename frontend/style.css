@@ -36,10 +36,27 @@ input, select {
 }
 
 button {
+  padding: 10px 14px;
+  border-radius: 8px;
   border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button[type="submit"] {
   background: #2563eb;
   color: white;
-  cursor: pointer;
+}
+
+.btn-excluir {
+  background: #dc2626;
+  color: white;
+  margin-top: 10px;
+}
+
+button:not(.btn-excluir):not([type="submit"]) {
+  background: #e5e7eb;
+  color: #333;
 }
 
 button:hover {
@@ -47,18 +64,44 @@ button:hover {
 }
 
 .cliente-card {
-  background: #f9fafb;
-  border: 1px solid #ddd;
+  background: #ffffff;
+  border-radius: 12px;
   padding: 16px;
-  border-radius: 10px;
   margin-bottom: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease;
+}
+
+.cliente-card:hover {
+  transform: translateY(-3px);
 }
 
 .cliente-card p {
   margin: 6px 0;
 }
 
-.btn-excluir {
-  background: #dc2626;
-  margin-top: 10px;
+.cliente-card button {
+  margin-right: 8px;
+}
+
+.status {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.status.lead {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status.cliente {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status.em-contato {
+  background: #dbeafe;
+  color: #1e40af;
 }
