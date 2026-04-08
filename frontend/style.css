@@ -105,3 +105,9 @@ button:hover {
   background: #dbeafe;
   color: #1e40af;
 }
+
+#busca {
+  width: 100%;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}

@@ -1,35 +1,48 @@
 const form = document.getElementById('form-cliente');
 const listaClientes = document.getElementById('lista-clientes');
 const botaoSubmit = document.querySelector('button[type="submit"]');
+const campoBusca = document.getElementById('busca');
 
 const API_URL = 'http://localhost:3000/clientes';
 
 let clienteEditandoId = null;
+let todosClientes = [];
+
+function renderizarClientes(clientes) {
+  listaClientes.innerHTML = '';
+
+  clientes.forEach((cliente) => {
+    const div = document.createElement('div');
+    div.classList.add('cliente-card');
+
+    const classeStatus = cliente.status.toLowerCase().replace(/\s+/g, '-');
+
+    div.innerHTML = `
+      <p><strong>ID:</strong> ${cliente.id}</p>
+      <p><strong>Nome:</strong> ${cliente.nome}</p>
+      <p><strong>Email:</strong> ${cliente.email}</p>
+      <p><strong>Telefone:</strong> ${cliente.telefone}</p>
+      <p><strong>Status:</strong> 
+        <span class="status ${classeStatus}">
+          ${cliente.status}
+        </span>
+      </p>
+
+      <button type="button" onclick="editarCliente(${cliente.id})">Editar</button>
+      <button type="button" class="btn-excluir" onclick="excluirCliente(${cliente.id})">Excluir</button>
+    `;
+
+    listaClientes.appendChild(div);
+  });
+}
 
 async function carregarClientes() {
   try {
     const resposta = await fetch(API_URL);
     const clientes = await resposta.json();
 
-    listaClientes.innerHTML = '';
-
-    clientes.forEach((cliente) => {
-      const div = document.createElement('div');
-      div.classList.add('cliente-card');
-
-      div.innerHTML = `
-        <p><strong>ID:</strong> ${cliente.id}</p>
-        <p><strong>Nome:</strong> ${cliente.nome}</p>
-        <p><strong>Email:</strong> ${cliente.email}</p>
-        <p><strong>Telefone:</strong> ${cliente.telefone}</p>
-        <p><strong>Status:</strong> ${cliente.status}</p>
-
-        <button type="button" onclick="editarCliente(${cliente.id})">Editar</button>
-        <button type="button" class="btn-excluir" onclick="excluirCliente(${cliente.id})">Excluir</button>
-      `;
-
-      listaClientes.appendChild(div);
-    });
+    todosClientes = clientes;
+    renderizarClientes(clientes);
   } catch (erro) {
     console.error('Erro ao carregar clientes:', erro);
   }
@@ -111,5 +124,17 @@ async function excluirCliente(id) {
     console.error('Erro ao excluir cliente:', erro);
   }
 }
+
+campoBusca.addEventListener('input', () => {
+  const termo = campoBusca.value.toLowerCase();
+
+  const clientesFiltrados = todosClientes.filter((cliente) =>
+    cliente.nome.toLowerCase().includes(termo) ||
+    cliente.email.toLowerCase().includes(termo) ||
+    cliente.status.toLowerCase().includes(termo)
+  );
+
+  renderizarClientes(clientesFiltrados);
+});
 
 carregarClientes();
