@@ -1,7 +1,10 @@
 const form = document.getElementById('form-cliente');
 const listaClientes = document.getElementById('lista-clientes');
+const botaoSubmit = document.querySelector('button[type="submit"]');
 
 const API_URL = 'http://localhost:3000/clientes';
+
+let clienteEditandoId = null;
 
 async function carregarClientes() {
   try {
@@ -21,8 +24,8 @@ async function carregarClientes() {
         <p><strong>Telefone:</strong> ${cliente.telefone}</p>
         <p><strong>Status:</strong> ${cliente.status}</p>
 
-        <button onclick="editarCliente(${cliente.id})">Editar</button>
-        <button class="btn-excluir" onclick="excluirCliente(${cliente.id})">Excluir</button>
+        <button type="button" onclick="editarCliente(${cliente.id})">Editar</button>
+        <button type="button" class="btn-excluir" onclick="excluirCliente(${cliente.id})">Excluir</button>
       `;
 
       listaClientes.appendChild(div);
@@ -32,10 +35,34 @@ async function carregarClientes() {
   }
 }
 
+function editarCliente(id) {
+  fetch(API_URL)
+    .then((resposta) => resposta.json())
+    .then((clientes) => {
+      const cliente = clientes.find((c) => c.id == id);
+
+      if (!cliente) {
+        alert('Cliente não encontrado.');
+        return;
+      }
+
+      document.getElementById('nome').value = cliente.nome;
+      document.getElementById('email').value = cliente.email;
+      document.getElementById('telefone').value = cliente.telefone;
+      document.getElementById('status').value = cliente.status;
+
+      clienteEditandoId = id;
+      botaoSubmit.textContent = 'Atualizar';
+    })
+    .catch((erro) => {
+      console.error('Erro ao buscar cliente para edição:', erro);
+    });
+}
+
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
 
-  const novoCliente = {
+  const cliente = {
     nome: document.getElementById('nome').value,
     email: document.getElementById('email').value,
     telefone: document.getElementById('telefone').value,
@@ -43,20 +70,31 @@ form.addEventListener('submit', async (event) => {
   };
 
   try {
-    const resposta = await fetch(API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(novoCliente)
-    });
+    if (clienteEditandoId !== null) {
+      await fetch(`${API_URL}/${clienteEditandoId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(cliente)
+      });
 
-    if (resposta.ok) {
-      form.reset();
-      carregarClientes();
+      clienteEditandoId = null;
+      botaoSubmit.textContent = 'Cadastrar';
+    } else {
+      await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(cliente)
+      });
     }
+
+    form.reset();
+    carregarClientes();
   } catch (erro) {
-    console.error('Erro ao cadastrar cliente:', erro);
+    console.error('Erro ao salvar cliente:', erro);
   }
 });
 
@@ -72,23 +110,6 @@ async function excluirCliente(id) {
   } catch (erro) {
     console.error('Erro ao excluir cliente:', erro);
   }
-}
-
-function editarCliente(id) {
-  const nome = prompt('Novo nome:');
-  const email = prompt('Novo email:');
-  const telefone = prompt('Novo telefone:');
-  const status = prompt('Novo status (lead, em contato, cliente):');
-
-  fetch(`${API_URL}/${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ nome, email, telefone, status })
-  })
-    .then(() => carregarClientes())
-    .catch((erro) => console.error('Erro ao editar:', erro));
 }
 
 carregarClientes();
